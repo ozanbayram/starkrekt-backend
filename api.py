@@ -9,5 +9,3 @@ def show_approval():
     tx = Database().get_data(int(address, 16))
     print(tx)
     return jsonify(tx)
-
-app.run(debug=True)
