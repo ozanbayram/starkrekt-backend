@@ -9,3 +9,5 @@ def show_approval():
     tx = Database().get_data(int(address, 16))
     print(tx)
     return jsonify(tx)
+
+app.run(port=5000, host='0.0.0.0')
