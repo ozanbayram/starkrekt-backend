@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from db import Database
 
 app = Flask(__name__)
@@ -8,4 +8,6 @@ def show_approval():
     address = request.args.get("address")
     tx = Database().get_data(int(address, 16))
     print(tx)
-    return tx
+    return jsonify(tx)
+
+app.run(debug=True)
