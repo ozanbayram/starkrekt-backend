@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route("/aproval/tx")
 def show_approval():
     address = request.args.get("address")
-    tx = Database().get_data(int(address, 16))
+    tx = Database().approve_get_data(int(address, 16))
     print(tx)
     return jsonify(tx)
 
