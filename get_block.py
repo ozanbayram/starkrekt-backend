@@ -32,7 +32,7 @@ def get_block(ilk, son):
                     tx_hash = hex(tx.hash)
                     tx_from = hex(tx.sender_address)
                     print(type(tx_from))
-                    db.insert_data(block_no=block_no, tx_hash=tx_hash, tx_from=tx_from, contract=contract, spender=spender, kind=kind)
+                    db.approve_insert_data(block_no=block_no, tx_hash=tx_hash, tx_from=tx_from, contract=contract, spender=spender, kind=kind)
                     print(tx_hash, block_no, kind, spender, tx_from)
 
 if __name__ == "__main__":     
