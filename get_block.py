@@ -11,9 +11,9 @@ mainnet_client = FullNodeClient(node_url=node_url)
 
 def get_block(ilk, son):
     for block_no in range(ilk, son+1):
+        print(block_no)
         block = mainnet_client.get_block_sync(block_number=block_no)
         txs = block.transactions
-        print(block_no)
         for tx in txs:
             if "calldata" in dir(tx):
                 if int(nft_approval) in tx.calldata or int(token_approval) in tx.calldata :
@@ -30,11 +30,11 @@ def get_block(ilk, son):
                     contract = hex(tx.calldata[tx.calldata.index(int(approval_type))-1])
                     tx_hash = hex(tx.hash)
                     tx_from = hex(tx.sender_address)
-                    print(type(tx_from))
-                    db.approve_insert_data(block_no=block_no, tx_hash=tx_hash, tx_from=tx_from, contract=contract, spender=spender, kind=kind)
-                    print(tx_hash, block_no, kind, spender, tx_from)
+                    #print(type(tx_from))
+                    #db.approve_insert_data(block_no=block_no, tx_hash=tx_hash, tx_from=tx_from, contract=contract, spender=spender, kind=kind)
+                    print(tx_hash, block_no, contract, kind, spender, tx_from)
 
 if __name__ == "__main__":     
     db=Database()
-    get_block(84000,86000)
+    get_block(86000,86050)
 
