@@ -18,7 +18,7 @@ def process_data(data):
     allowance = ct.approval_allowance(owner=int(data["tx_from"], 16), spender=int(data["spender"], 16))
     name = ct.name()
     kind = Database().contract_get_kind(data["contract"])
-    return {"name":name, "contract":data["contract"], "spender":data["spender"], "kind":kind, "allowance":allowance}
+    return {"name":name, "contract":data["contract"], "spender":data["spender"], "tx_from":data["tx_from"], "kind":kind, "allowance":allowance}
 
 
 if __name__ == '__main__':

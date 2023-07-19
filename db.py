@@ -33,7 +33,6 @@ class Database():
             datax.append(pair)
         return datax
     
-
     def contract_init(self, contract):
         params = (contract,)
         self.im.execute("""SELECT contract FROM contract WHERE contract = ? """, params)
@@ -73,11 +72,11 @@ class Database():
         self.vt.commit()
 
 if __name__ == "__main__":   
-    #db=Database()
-    #db.delete()
+    db=Database()
+    w=db.approve_get_full()
     #a=(db("0x00da114221cb8355fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3))
     #print(a)
-    print(sqlite3.sqlite_version)
+    print(w)
 
 
 

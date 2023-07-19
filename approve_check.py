@@ -77,9 +77,9 @@ class Contract_addr():
         return name
 
 if __name__ == "__main__":     
-    a=Contract_addr("0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3")
+    a=Contract_addr("0x07feff50d156cc0a44098a74d9747c35ff12e0a3b2b3fd248f37c676112ac1fb")
     
     q=a.approval_allowance(
-                       int("0x37c27b80c6c672a93d8631bec2499dbe012d2120c6a59b9aae8ce0e9e79f4a3", 16),
-                       int("0x41682b0bcd5db29046130db68a7f6650433acabc0792db559dac247305df783",16))
+                       int("0x37C27B80c6C672A93d8631bEC2499dbE012d2120c6A59B9aAe8Ce0E9E79f4a3", 16),
+                       int("0x2a92f0f860bf7c63fb9ef42cff4137006b309e0e6e1484e42d0b5511959414d",16))
     print(q)
