@@ -2,7 +2,7 @@ import sqlite3
 
 class Database():
     def __init__(self):
-        self.vt = sqlite3.connect('/home/ozan/starkrevoke/approve.sqlite')
+        self.vt = sqlite3.connect('starkrekt-backend/approve.sqlite')
         self.im = self.vt.cursor()
         self.im.execute("""CREATE TABLE IF NOT EXISTS approve (block_no, tx_hash, tx_from, contract, spender, kind)""") #kind i silecem burdan
         self.im.execute("""CREATE TABLE IF NOT EXISTS contract (contract, name, kind)""")
