@@ -6,11 +6,13 @@ from starknet_py.net.client_models import Call
 from starknet_py.hash.selector import get_selector_from_name
 from starknet_py.net.client_errors import ClientError
 from db import Database
+import logging
 
+logging.basicConfig(level=logging.INFO, filename='logs/approve_check.log', format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Contract_addr():
     def __init__(self, contract):
-        node_url = "https://starknet-mainnet.g.alchemy.com/v2/ojezKjwSAjeWO896rIjeNti1CzNzSwnG"
+        node_url = "http://localhost:6060"
         full_node_client = FullNodeClient(node_url=node_url)
         self.provider=Account(
             address=0x02c0c89bec631039bcfc6f5041825baaae37f3f2606ce0d056c65093dd644b1a,
@@ -22,6 +24,7 @@ class Contract_addr():
         Database().contract_init(contract) #for cache
 
     def approval_allowance(self, owner, spender):
+        logging.debug("approval_allowance func çalışıyor" )
         kind = Database().contract_get_kind(self.contract)
         if kind:
             if kind == "nft":
@@ -33,7 +36,10 @@ class Contract_addr():
                             selector=get_selector_from_name(func),
                             calldata=[owner,spender]
                                         )
-            allowance = self.provider.client.call_contract_sync(approval_call)[0]
+            try:
+                allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
+            except Exception as e:
+                logging.exception("Exception occurred")
         else:
             try:
                 approval_call = Call(
@@ -42,7 +48,7 @@ class Contract_addr():
                             calldata=[owner,spender]
                             )
                 Database().contract_update_kind(self.contract, "token")
-                allowance = self.provider.client.call_contract_sync(approval_call)[0]
+                allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
             except ClientError:
                 approval_call = Call(
                             to_addr=self.contract,
@@ -50,14 +56,15 @@ class Contract_addr():
                             calldata=[owner,spender]
                                       )
                 Database().contract_update_kind(self.contract, "nft")
-                allowance = self.provider.client.call_contract_sync(approval_call)[0]
+                allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
             except Exception as err:
-                print(f"Unexpected {err=}, {type(err)=}", self.contract)
+                logging.exception(f"Unexpected error. {self.contract} ")
                 return "unknown"
 
         return allowance
 
     def name(self):
+        logging.debug("name func çalışıyor" )
         name = Database().contract_get_name(self.contract)
         if name:
             return name
@@ -68,10 +75,11 @@ class Contract_addr():
                             calldata=[]
                                       )
             try:
-                name = self.provider.client.call_contract_sync(name_call)
+                name = self.provider.client.call_contract_sync(call=name_call, block_number="latest")
                 name = bytearray.fromhex(hex(name[0])[2:]).decode()
                 Database().contract_update_name(self.contract, name)
             except:
+                logging.exception(f"Unexpected error. {self.contract} ")
                 return "unknown"
 
         return name

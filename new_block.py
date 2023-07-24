@@ -5,20 +5,23 @@ from starknet_py.net.models import StarknetChainId
 import time
 from get_block import get_block
 from starknet_py.net.client_errors import ClientError
+import logging
 
-node_url = "https://starknet-mainnet.g.alchemy.com/v2/U_b8ufSWw8Q1l4gnTaMGlq7wl4PdW14_"
+node_url = "http://localhost:6060"
 full_node_client = FullNodeClient(node_url=node_url)
 block = full_node_client.get_block_sync(block_number="latest")
 current_block = block.block_number
-print("current",current_block)
+
 while True:
     time.sleep(2)
-    block = full_node_client.get_block_sync(block_number="latest")
+    try:
+        block = full_node_client.get_block_sync(block_number="latest")
+    except:
+        logging.exception("Exception occurred")    
     new_query = block.block_number
-    print("query",new_query)
     if new_query > current_block:
         current_block = new_query
-        print("current_block",current_block)
+        print("current_block", current_block)
         while True:
             time.sleep(3)
             try:
@@ -26,3 +29,5 @@ while True:
                 break
             except ClientError:
                 pass
+            except:
+                logging.exception("Exception occurred")
