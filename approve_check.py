@@ -39,7 +39,7 @@ class Contract_addr():
             try:
                 allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
             except Exception as e:
-                logging.exception("Exception occurred")
+                logging.exception(f"Exception occurred CT:{self.contract}, SP:{spender}, Owner:{owner}")
         else:
             try:
                 approval_call = Call(
@@ -47,16 +47,16 @@ class Contract_addr():
                             selector=get_selector_from_name("allowance"),
                             calldata=[owner,spender]
                             )
-                Database().contract_update_kind(self.contract, "token")
                 allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
+                Database().contract_update_kind(self.contract, "token")
             except ClientError:
                 approval_call = Call(
                             to_addr=self.contract,
                             selector=get_selector_from_name("isApprovedForAll"),
                             calldata=[owner,spender]
                                       )
-                Database().contract_update_kind(self.contract, "nft")
                 allowance = self.provider.client.call_contract_sync(call=approval_call, block_number="latest")[0]
+                Database().contract_update_kind(self.contract, "nft")
             except Exception as err:
                 logging.exception(f"Unexpected error. {self.contract} ")
                 return "unknown"
@@ -85,9 +85,9 @@ class Contract_addr():
         return name
 
 if __name__ == "__main__":     
-    a=Contract_addr("0x07feff50d156cc0a44098a74d9747c35ff12e0a3b2b3fd248f37c676112ac1fb")
+    a=Contract_addr("0x10006a2516f6a3eae392c14bd355287a99c16a2d3f1e5d6beaeada7a360106e")
     
     q=a.approval_allowance(
-                       int("0x37C27B80c6C672A93d8631bEC2499dbE012d2120c6A59B9aAe8Ce0E9E79f4a3", 16),
-                       int("0x2a92f0f860bf7c63fb9ef42cff4137006b309e0e6e1484e42d0b5511959414d",16))
+                       int("2029465295112035131755114657150204409949577836511997973657918255827659592446"),
+                       int("3461208862407773342635871960084685728498932599526891269545319004528055383761"))
     print(q)
