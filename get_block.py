@@ -31,23 +31,25 @@ def get_block(ilk, son):
                     #calldata_len_index = (call_array_len*4)+1 #for cairo 0
                     #calldata_len = tx.calldata[calldata_len_index]
                     #full_data_len = calldata_len_index + calldata_len + 1
+                    try:
+                        checking_cairo_1_or_0 = tx.calldata[tx.calldata.index(int(approval_input))+2]
+                        if checking_cairo_1_or_0 > 1000: #is cairo 1
+                            contract = hex(tx.calldata[tx.calldata.index(int(approval_input))-1])
+                            #tx_hash = hex(tx.hash)
+                            tx_from = hex(tx.sender_address)
+                            spender = hex(tx.calldata[tx.calldata.index(int(approval_input))+2])
 
-                    checking_cairo_1_or_0 = tx.calldata[tx.calldata.index(int(approval_input))+2]
-                    if checking_cairo_1_or_0 > 1000: #is cairo 1
-                        contract = hex(tx.calldata[tx.calldata.index(int(approval_input))-1])
-                        #tx_hash = hex(tx.hash)
-                        tx_from = hex(tx.sender_address)
-                        spender = hex(tx.calldata[tx.calldata.index(int(approval_input))+2])
-
-                    else: #is cairo 0
-                        data = tx.calldata[(call_array_len*4)+2:]
-                        spender_index = tx.calldata[tx.calldata.index(int(approval_input))+1]
-                        spender = hex(data[spender_index])
-                        contract = hex(tx.calldata[tx.calldata.index(int(approval_input))-1])
-                        #tx_hash = hex(tx.hash)
-                        tx_from = hex(tx.sender_address)
-                    db.approve_insert_data(tx_from=tx_from, contract=contract, spender=spender)
-                    logging.info(f"{contract}, {spender}, {tx_from}")
+                        else: #is cairo 0
+                            data = tx.calldata[(call_array_len*4)+2:]
+                            spender_index = tx.calldata[tx.calldata.index(int(approval_input))+1]
+                            spender = hex(data[spender_index])
+                            contract = hex(tx.calldata[tx.calldata.index(int(approval_input))-1])
+                            #tx_hash = hex(tx.hash)
+                            tx_from = hex(tx.sender_address)
+                        db.approve_insert_data(tx_from=tx_from, contract=contract, spender=spender)
+                        logging.info(f"{contract}, {spender}, {tx_from}")
+                    except:
+                        logging.exception(f"{contract}, {spender}, {tx_from}")
 
 if __name__ == "__main__":     
     #db=Database()
