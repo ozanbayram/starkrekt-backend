@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from db import Database
 from multiprocessing import Pool
 from db import Database
-from main import rm_duplicate, process_data
+from main import process_data
 from flask_cors import CORS
 import logging
 import time
