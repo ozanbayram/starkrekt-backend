@@ -27,7 +27,7 @@ class Database():
             print("Record already exists and won't be added again.")
 
     def approve_get_data(self, tx_from):
-        params = (tx_from,)
+        params = (hex(tx_from),)
         self.im.execute("""SELECT * FROM approve WHERE tx_from = ? """, params)
         data = self.im.fetchall()
         key = ("tx_from", "contract", "spender")

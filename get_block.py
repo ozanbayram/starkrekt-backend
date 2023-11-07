@@ -1,5 +1,5 @@
 from starknet_py.net.networks import MAINNET, TESTNET
-from db import Database
+from dbdocker import Database
 from starknet_py.net.full_node_client import FullNodeClient
 import logging
 

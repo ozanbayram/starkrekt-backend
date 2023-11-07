@@ -2,7 +2,7 @@ import sqlite3
 
 class Database():
     def __init__(self):
-        self.vt = sqlite3.connect('/home/ozan/starkrekt-backend/approve.sqlite')
+        self.vt = sqlite3.connect('/root/starkrekt-backend/approve.sqlite')
         self.im = self.vt.cursor()
         self.im.execute("""CREATE TABLE IF NOT EXISTS approve (
                             tx_from TEXT, 
@@ -27,7 +27,7 @@ class Database():
             print("Record already exists and won't be added again.")
 
     def approve_get_data(self, tx_from):
-        params = (tx_from,)
+        params = (hex(tx_from),)
         self.im.execute("""SELECT * FROM approve WHERE tx_from = ? """, params)
         data = self.im.fetchall()
         key = ("tx_from", "contract", "spender")
