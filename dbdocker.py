@@ -15,7 +15,8 @@ class Database():
         self.im.execute("""CREATE TABLE IF NOT EXISTS contract (
                             contract TEXT, 
                             name TEXT, 
-                            kind TEXT)""")
+                            kind TEXT,
+                            decimals INT)""")
 
     def approve_insert_data(self, tx_from, contract, spender):
         params = (tx_from, contract, spender)
@@ -45,8 +46,8 @@ class Database():
         params = (contract,)
         self.im.execute("""SELECT contract FROM contract WHERE contract = ? """, params)
         if not self.im.fetchone():
-            params = (contract, None, None)
-            self.im.execute("""INSERT INTO contract VALUES (?, ?, ?)""", params)
+            params = (contract, None, None, None)
+            self.im.execute("""INSERT INTO contract VALUES (?, ?, ?, ?)""", params)
             self.vt.commit()
 
     def contract_update_name(self, contract ,name):
@@ -74,6 +75,23 @@ class Database():
         if data:
             return data[0]
         return None
+
+    def contract_update_decimals(self, contract, decimals):
+        params = (decimals, contract)
+        self.im.execute("""UPDATE contract SET decimals = ? WHERE contract = ? """, params)
+        self.vt.commit()
+
+    def contract_get_decimals(self, contract):
+        params = (contract,)
+        self.im.execute("""SELECT decimals FROM contract WHERE contract = ? """, params)
+        data = self.im.fetchone()
+        if data:
+            return data[0]
+        return None
+    
+    def add_column(self):
+        self.im.execute("ALTER TABLE contract ADD COLUMN decimals INTEGER")
+
     
 if __name__ == "__main__":   
     db=Database()
@@ -81,11 +99,5 @@ if __name__ == "__main__":
     #a=(db("0x00da114221cb8355fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3))
     #print(a)
     #print(w[-1])
-    k=db.contract_get_kind("0x50031010bcee2f43575b3afe197878e064e1a03c12f2ff437f29a2710e0b6ef")
+    k=db.add()
     print(k)
-
-
-
-
-
-

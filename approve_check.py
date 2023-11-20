@@ -83,6 +83,27 @@ class Contract_addr():
                 return "unknown"
 
         return name
+    
+    def decimals(self):
+        logging.debug("decimals func çalışıyor" )
+        decimals = Database().contract_get_decimals(self.contract)
+        if decimals:
+            return decimals
+        else:
+            decimals_call = Call(
+                            to_addr=self.contract,
+                            selector=get_selector_from_name("decimals"),
+                            calldata=[]
+                                      )
+            try:
+                decimals = self.provider.client.call_contract_sync(call=decimals_call, block_number="latest")
+                decimals = decimals[0]
+                Database().contract_update_decimals(self.contract, decimals)
+            except:
+                logging.exception(f"Unexpected error. {self.contract} ")
+                return "unknown"
+
+        return decimals
 
 if __name__ == "__main__":     
     a=Contract_addr("0x10006a2516f6a3eae392c14bd355287a99c16a2d3f1e5d6beaeada7a360106e")
